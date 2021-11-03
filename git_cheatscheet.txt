@@ -1,0 +1,24 @@
+
+git init
+
+git add . 
+
+git commit -m '<your message>'
+
+git branch -M main
+git remote add origin https://github.com/RenStyleAir/0A_whats_next.git
+git push -u origin main
+
+pull from gitHub*
+
+
+
+
+
+
+
+
+
+
+
+

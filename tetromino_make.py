@@ -237,8 +237,8 @@ def runGame():
                 #rotation
                 elif (event.key == K_up or event.key == K_w):
                     fallingPiece['rotation'] = (fallingPiece['rotation'] +1) %len(SHAPES[fallingPiece['shape']])
-                    
 
+# new
 
                 
 

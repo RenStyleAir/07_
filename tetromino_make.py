@@ -237,9 +237,15 @@ def runGame():
                 #rotation
                 elif (event.key == K_up or event.key == K_w):
                     fallingPiece['rotation'] = (fallingPiece['rotation'] +1) %len(SHAPES[fallingPiece['shape']])
+                    if not isValidPosition(board, fallingPiece):
+                        fallingPiece['rotation'] = (fallingPiece['rotation']-1) % len(SHAPES[fallingPiece['shape']])
+                    elif (event.key == K_q): 
+                        fallingPiece['rotation'] = (fallingPiece['rotation']+ 1) % len(SHAPES[fallingPiece['shape']])
+                        if not isValidPosition(boar, fallingPiece):
+                            fallingPiece['rotation'] = (fallingPiece['rotation'] + 1)% len(SHAPES[fallingPiece['shape']])
 
-# new
-
+                # fall faster
+                 
                 
 
 

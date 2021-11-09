@@ -239,6 +239,7 @@ def runGame():
                     fallingPiece['rotation'] = (fallingPiece['rotation'] +1) %len(SHAPES[fallingPiece['shape']])
 
 # new
+# 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
 
                 
 

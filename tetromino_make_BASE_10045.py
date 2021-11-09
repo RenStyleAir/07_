@@ -237,59 +237,10 @@ def runGame():
                 #rotation
                 elif (event.key == K_up or event.key == K_w):
                     fallingPiece['rotation'] = (fallingPiece['rotation'] +1) %len(SHAPES[fallingPiece['shape']])
-                    if not isValidPosition(board, fallingPiece):
-                        fallingPiece['rotation'] = (fallingPiece['rotation']-1) % len(SHAPES[fallingPiece['shape']])
-                    elif (event.key == K_q): 
-                        fallingPiece['rotation'] = (fallingPiece['rotation']+ 1) % len(SHAPES[fallingPiece['shape']])
-                        if not isValidPosition(boar, fallingPiece):
-                            fallingPiece['rotation'] = (fallingPiece['rotation'] + 1)% len(SHAPES[fallingPiece['shape']])
 
-                # fall faster
-                elif(event.key == K_DOWN or event.key == K_s) :
-                    movingDown = True
-                    if isValidPosition(board, fallingPiece, adjY=1):
-                        fallingPiece['y'] += 1
-                    lastMoveDownTime = time.time()
+# new
 
-                # 
-                elif event.key == K_SPACE:
-                    movingDown = False
-                    movingLeft = False
-                    movingRight = False
-                    for i in range(1, BOARDHEIGHT):
-                        if not isValidPosition(board, fallingPiece, adjY=i):
-                            break
-                    fallingPiece['y'] += i -1
-
-        # 
-        if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime() >  MOVESIDEWAYSFREQ:
-            if movingLeft and isValidPosition(board, fallingPiece, adjX = -1):
-                fallingPiece['x'] -= 1
-            elif movingRight and isValidPosition(board, fallingPiece, adjX = 1):
-                fallingPiece['x'] += 1
-            lastMoveSidewaysTime = time.time()
-
-        if movingDown and time.time() - lastMoveDownTime > MOVEDOWNFREQ and isValidPositon(board, fallingPiece, adjy = 1): 
-            fallingPiece['y'] += 1
-            lastMoveDownTime = time.time()
-
-        #
-        if time.time() - lastFallTime > fallFreq:
-            # 
-            if not isValidPosition(board, fallingPiece, adjY = 1):
-                # 
-                addToBoard(board, fallingPiece)
-                score += removeCompletelines(board)
-                level , fallFreq = calculateLevenAndFallFreq(score)
-            else:
-                # 
-                fallingPiece['y'] += 1
-                lastFallTime = time.time()
-
-
-
-
-
+                
 
 
 

@@ -260,36 +260,10 @@ def runGame():
                         if not isValidPosition(board, fallingPiece, adjY=i):
                             break
                     fallingPiece['y'] += i -1
-
-        # 
-        if (movingLeft or movingRight) and time.time() - lastMoveSidewaysTime() >  MOVESIDEWAYSFREQ:
-            if movingLeft and isValidPosition(board, fallingPiece, adjX = -1):
-                fallingPiece['x'] -= 1
-            elif movingRight and isValidPosition(board, fallingPiece, adjX = 1):
-                fallingPiece['x'] += 1
-            lastMoveSidewaysTime = time.time()
-
-        if movingDown and time.time() - lastMoveDownTime > MOVEDOWNFREQ and isValidPositon(board, fallingPiece, adjy = 1): 
-            fallingPiece['y'] += 1
-            lastMoveDownTime = time.time()
-
-        #
-        if time.time() - lastFallTime > fallFreq:
-            # 
-            if not isValidPosition(board, fallingPiece, adjY = 1):
-                # 
-                addToBoard(board, fallingPiece)
-                score += removeCompletelines(board)
-                level , fallFreq = calculateLevenAndFallFreq(score)
-            else:
-                # 
-                fallingPiece['y'] += 1
-                lastFallTime = time.time()
+                    
 
 
-
-
-
+                
 
 
 

@@ -286,6 +286,53 @@ def runGame():
                 fallingPiece['y'] += 1
                 lastFallTime = time.time()
 
+            
+        # 
+        DISPALYSURF.fill(BGCOLOR)
+        drawBoard(board)
+        drawStatus(score, level)
+        drawNextPiece(nextPiece)
+        if fallingPiece != None:
+            drawPiece(fallingPiece)
+        
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+
+def makeTextObjs(text, font, color):
+    surf = font.render(text, True, color)
+    return surf, surf.get_rect()
+
+
+def terminate():
+    pygame.quit()
+    sys.exit()
+
+
+def checkForKeyPress():
+    # 
+    # 
+    checkForQuit()
+
+    for event in pygame.event.get([KEYDOWN, KEYUP]):
+            if event.type == KEYDOWN:
+                continue
+            return event.key
+        return None
+
+    
+def showTextScreen(text):
+    # 
+    # 
+    # 
+    titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTSHADOWCOLOR)
+    titleRect.center = (int(WINDOWWIDTH /2 ), int(WINDOWHEIGHT /2))
+
+
+
+
+
+
 
 
 

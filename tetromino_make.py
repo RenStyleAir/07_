@@ -327,11 +327,80 @@ def showTextScreen(text):
     # 
     titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTSHADOWCOLOR)
     titleRect.center = (int(WINDOWWIDTH /2 ), int(WINDOWHEIGHT /2))
+    DISPLAYSURF.blit(titleSurf, titleRect)
+
+    # 
+    titleSurf, titleRect = makeTextObjs(text, BIGFONT, TEXTCOLOR)
+    titleRect.center = (int(WINDOWWIDTH /2 )-3, int(WINDOWHEIGHT /2)-3)
+    DISPLAYSURF.blit(titleSurf, titleRect)
 
 
+    pressKeySurf, pressKeyRect = makeTextObjs('Press a key to play.', BASICFONT, TEXTCOLOR)
+    pressKeyRect.center = (int(WINDOWWIDTH/2), int(WINDOWHEIGHT) /2 + 100)
+    DISPLAYSURF.blit(pressKeySurf, pressKeyRect)
+
+    while checkForKeyPress() == None:
+        pygame.display.update()
+        FPSCLOCK.tick(FPS)
+
+    
+def checkForQuit():
+    for event in pygame.event.get(QUIT):
+        terminate()
+    for event in pygame.event.get(KEYUP):
+        if event == K_ESCAPE:
+            terminate()
+        pygame.event.post(event)
 
 
+def calculateLevelAndFallFreq(score):
+    # 
+    # 
+    level = int(score/ 10) +1
+    fallFreq = 0.27 - (level * 0.02)
+    return level, fallFreq
 
+def getNewPiece():
+    # 
+    shape = random.choice(list(SHAPES.keys()))
+    newPiece = {'shape': shape,
+                'rotation': random.randint(0, len(SHAPES[shape]) -1 ),
+                'x': int(BOARDWIDTH/2) - int(TEMPLATEWIDTH/2),
+                'y': -2,
+                'color': random.randint(0, len(colors)-1)}
+    return newPiece
+
+
+def addToBoard(board, piece):
+    # 
+    for x in range(TEMPLATEWIDTH):
+        for y in range(TEMPLATEHEIGHT):
+            if SHAPES[piece['shape']][piece['rotation'][x][y]] != BLANK:
+                board[x + piece['x']][y + piece['y']] = piece['color']
+
+
+def getBlankBoard():
+    # 
+    board = []
+    for i in range(BOARDWIDTH):
+        board.append([BLANK]* BOARDHEIGH)
+    return board
+
+
+def isOnBoard(x,y):
+    return x >= 0 and x < BOARDWIDTH and y < BOARDHEIGH
+
+
+def isFalisPosition(board, piece, adjX = 0, adjY = 0):
+    # 
+    for x in range(TEMPLATEWIDTH):
+        for y in range(TEMPLATEHEIGHT):
+            isAboveBoard = y + piece['y'] + adjY < 0 
+            if isAboveBoard or SHAPES[piece['shape']][piece['rotation']][y][x] == BLANK:
+                continue
+            # if not isOnBoard(x + piece['x'] + adjX , y + piece['y']+ adjY):
+            #     return False
+            
 
 
 

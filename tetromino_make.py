@@ -398,9 +398,51 @@ def isFalisPosition(board, piece, adjX = 0, adjY = 0):
             isAboveBoard = y + piece['y'] + adjY < 0 
             if isAboveBoard or SHAPES[piece['shape']][piece['rotation']][y][x] == BLANK:
                 continue
-            # if not isOnBoard(x + piece['x'] + adjX , y + piece['y']+ adjY):
-            #     return False
-            
+            if not isOnBoard(x + piece['x'] + adjX , y + piece['y']+ adjY):
+                return False
+            if board[x + piece['x'] + adjX][y + piece['y'] + adjY] != BLANK:
+                return False
+        return True
+
+def isCompleteLine(board, y):
+    # 
+    for x in range(BOARDWIDTH):
+        if board[x][y] == BLANK:
+            return False 
+        return True
+
+
+def removeCompleteLines(board):
+    # 
+    numLinesRemoved = 0 
+    y = BOARDHEIGH -1
+    while y > 0 :
+        if isCompleteLine(board, y):
+        # 
+            for pullDownY in range(y, 0, -1):
+                for x in range(BOARDWIDTH):
+                    board[x][pullDownY] = board[x][pullDownY -1]
+        #
+            for x in range(BOARDWIDTH) :
+                board[x][0] = BLANK
+            numLinesRemoved += 1
+        # 
+        # 
+        # 
+        else:
+            y -= 1
+    return numLinesRemoved
+
+
+def convertToPixelCoords(boxx, boxy):
+    # 
+    # 
+    return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
+
+
+
+
+
 
 
 

@@ -17,7 +17,7 @@ BLANK = '.'
 MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
 
-XMARGINX = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE)/2)
+XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE)/2)
 TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGH - BOXSIZE) -5
 
 
@@ -440,22 +440,69 @@ def convertToPixelCoords(boxx, boxy):
     return (XMARGIN + (boxx * BOXSIZE)), (TOPMARGIN + (boxy * BOXSIZE))
 
 
+def drawBox(boxx, boxy, color, pixelx = None, pixely = None):
+    # 
+    # 
+    # 
+    # 
+    if color == BLANK:
+        return
+    if pixelx == None and pixely == None:
+        pixelx, pixely = convertToPixelCoords(boxx, boxy)
+    pygame.draw.rect(DISPLAYSURF, COLORS[color], (pixelx + 1, pixely + 1, BOXSIZE -1, BOXSIZE -1))
+    pygame.draw.rect(DISPLAYSURF, LIGHTCOLORS[color], (pixelx +1, pixely +1, BOXSIZE-4, BOXSIZE -4))
 
 
+def drawBoard():
+    # 
+    pygame.draw.rect(DISPLAYSURF, BGCOLOR, (XMARGIN -3, TOPMARGIN -7, (BOARDWIDTH*BOXSIZE) +8, (BOARDHEIGH*BOXSIZE)+8 ), 5)
+
+    # 
+    pygame.draw.rect(DISPLAYSURF, BORDERCOLOR, (XMARGIN, TOPMARGIN, BOXSIZE*BOARDWIDTH, BOXSIZE*BOARDHEIGH))
+    # 
+    for x in range(BOARDWIDTH):
+        for y in range(BOARDHEIGH):
+            drawBox(x,y, board[x][y])
 
 
+def drawStatus(score, level):
+    # 
+    scoreSurf = BASICFONT.render('Score: %s' % score, True, TEXTCOLOR)
+    scoreRect = scoreSurf.get_rect()
+    scoreRect.topleft = (WINDOWWIDTH - 150, 20)
+    DISPLAYSURF.blit(scoreSurf, scoreRect)
+
+    # 
+    levelSurf = BASICFONT.render('Level: %s' % level, True, TEXTCOLOR)
+    levelRect = levelSurf.get_rect()
+    levelRect.topleft = (WINDOWWIDTH - 150, 50)
+    DISPLAYSURF.blit(levelSurf, levelRect)
 
 
+def drawPiece(piece, pixelx = None, pixely= None):
+    shapeToDraw = SHAPES[piece['shape']][piece['rotation']]
+    if pixelx == None and pixely == None:
+        # 
+        pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'])
+
+        # 
+        for x in range(TEMPLATEWIDTH):
+            for y in range(TEMPLATEHEIGHT):
+                if shapeToDraw[y][x] != BLANK:
+                    drawBox(None, None, piece['color'], pixelx + (x*BOXSIZE), pixely +(y* BOXSIZE))
 
 
+def drawNextPiece(piece):
+    # 
+    nextSurf = BASICFONT.render('Next', True, TEXTCOLOR)
+    nextRect = nextSurf.get_rect()
+    nextRect.topleft = (WINDOWWIDTH -120 , 80)
+    DISPLAYSURF.blit(nextSurf, nextRect)
+    # 
+    drawPiece(piece, pixelx = WINDOWWIDTH-120, pixely= 100)
 
 
+if__name__=='__main__':
+    main()
 
-
-
-
-
-
-
-
-        
+    

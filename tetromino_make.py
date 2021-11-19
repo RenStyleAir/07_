@@ -18,7 +18,7 @@ MOVESIDEWAYSFREQ = 0.15
 MOVEDOWNFREQ = 0.1
 
 XMARGIN = int((WINDOWWIDTH - BOARDWIDTH * BOXSIZE)/2)
-TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT - BOXSIZE) -5
+TOPMARGIN = WINDOWHEIGHT - (BOARDHEIGHT * BOXSIZE) -5
 
 
 WHITE =         (255,255,255)
@@ -146,7 +146,7 @@ T_SHAPE_TEMPLATE = [['.....',
                     '.....']]
 
 
-SHAPES = {'S':S_SHAPE_TEMPLATE,
+PIECES = {  'S':S_SHAPE_TEMPLATE,
             'Z':Z_SHAPE_TEMPLATE,
             'J':J_SHAPE_TEMPLATE,
             'L':L_SHAPE_TEMPLATE,
@@ -280,11 +280,25 @@ def runGame():
                 # 
                 addToBoard(board, fallingPiece)
                 score += removeCompletelines(board)
-                level , fallFreq = calculateLevenAndFallFreq(score)
+                level , fallFreq = calculateLevelAndFallFreq(score)
+                fallingPiece = None
             else:
                 # 
                 fallingPiece['y'] += 1
                 lastFallTime = time.time()
+
+        # if time.time() - lastFallTime > fallFreq:
+        #     # see if the piece has landed
+        #     if not isValidPosition(board, fallingPiece, adjY=1):
+        #         # falling piece has landed, set it on the board
+        #         addToBoard(board, fallingPiece)
+        #         score += removeCompleteLines(board)
+        #         level, fallFreq = calculateLevelAndFallFreq(score)
+        #         fallingPiece = None
+        #     else:
+        #         # piece did not land, just move the piece down
+        #         fallingPiece['y'] += 1
+        #         lastFallTime = time.time()                
 
             
         # 
@@ -362,9 +376,9 @@ def calculateLevelAndFallFreq(score):
 
 def getNewPiece():
     # 
-    shape = random.choice(list(SHAPES.keys()))
+    shape = random.choice(list(PIECES.keys()))
     newPiece = {'shape': shape,
-                'rotation': random.randint(0, len(SHAPES[shape]) -1 ),
+                'rotation': random.randint(0, len(PIECES[shape]) -1 ),
                 'x': int(BOARDWIDTH/2) - int(TEMPLATEWIDTH/2),
                 'y': -2,
                 'color': random.randint(0, len(COLORS)-1)}
@@ -375,7 +389,8 @@ def addToBoard(board, piece):
     # 
     for x in range(TEMPLATEWIDTH):
         for y in range(TEMPLATEHEIGHT):
-            if SHAPES[piece['shape']][piece['rotation'][x][y]] != BLANK:
+            # if PIECES[piece['shape']][piece['rotation'][y][x]] != BLANK:
+            if PIECES[piece['shape']][piece['rotation']][y][x] != BLANK:
                 board[x + piece['x']][y + piece['y']] = piece['color']
 
 
@@ -388,22 +403,36 @@ def getBlankBoard():
 
 
 def isOnBoard(x,y):
-    return x >= 0 and x < BOARDWIDTH and y < BOARDHEIGH
+    return x >= 0 and x < BOARDWIDTH and y < BOARDHEIGHT
 
 
-def isValidPosition(board, piece, adjX = 0, adjY = 0):
-    # 
+# def isValidPosition(board, piece, adjX = 0, adjY = 0):
+#     # 
+#     for x in range(TEMPLATEWIDTH):
+#         for y in range(TEMPLATEHEIGHT):
+#             isAboveBoard = y + piece['y'] + adjY < 0 
+#             if isAboveBoard or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
+            
+#                 continue
+#             if not isOnBoard(x + piece['x'] + adjX , y + piece['y']+ adjY):
+#                 return False
+#             if board[x + piece['x'] + adjX][y + piece['y'] + adjY] != BLANK:
+#                 return False
+#         return True
+
+
+def isValidPosition(board, piece, adjX=0, adjY=0):
+    # Return True if the piece is within the board and not colliding
     for x in range(TEMPLATEWIDTH):
         for y in range(TEMPLATEHEIGHT):
-            isAboveBoard = y + piece['y'] + adjY < 0 
-            if isAboveBoard or SHAPES[piece['shape']][piece['rotation']][y][x] == BLANK:
-            
+            isAboveBoard = y + piece['y'] + adjY < 0
+            if isAboveBoard or PIECES[piece['shape']][piece['rotation']][y][x] == BLANK:
                 continue
-            if not isOnBoard(x + piece['x'] + adjX , y + piece['y']+ adjY):
+            if not isOnBoard(x + piece['x'] + adjX, y + piece['y'] + adjY):
                 return False
             if board[x + piece['x'] + adjX][y + piece['y'] + adjY] != BLANK:
                 return False
-        return True
+    return True
 
 def isCompleteLine(board, y):
     # 
@@ -413,10 +442,10 @@ def isCompleteLine(board, y):
         return True
 
 
-def removeCompleteLines(board):
+def removeCompletelines(board):
     # 
     numLinesRemoved = 0 
-    y = BOARDHEIGH -1
+    y = BOARDHEIGHT -1
     while y > 0 :
         if isCompleteLine(board, y):
         # 
@@ -480,7 +509,7 @@ def drawStatus(score, level):
 
 
 def drawPiece(piece, pixelx = None, pixely= None):
-    shapeToDraw = SHAPES[piece['shape']][piece['rotation']]
+    shapeToDraw = PIECES[piece['shape']][piece['rotation']]
     if pixelx == None and pixely == None:
         # 
         pixelx, pixely = convertToPixelCoords(piece['x'], piece['y'])

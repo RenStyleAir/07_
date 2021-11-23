@@ -414,7 +414,7 @@ def isCompleteLine(board, y):
     for x in range(BOARDWIDTH):
         if board[x][y] == BLANK:
             return False
-    return False
+    return True
 
 
 def removeCompleteLines(board):
